@@ -4,8 +4,7 @@ A lightweight, high-performance, single-page interactive sandbox designed for mo
 
 This repository serves as an educational tool for demonstrating taxonomic classification, binary feature space splitting, and interactive Web UI design.
 
-Demo Topic: Bicycle Terms (50)
-(https://srowboat.github.io/iQ/bicycle_deduction_game.html)
+[Demo Topic: Bicycle Terms (50)](https://srowboat.github.io/iQ/bicycle_deduction_game.html)
 
 ## ✍️ Author & Credits
 
