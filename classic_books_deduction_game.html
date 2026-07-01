@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Books Knowledge Base Deduction Sandbox</title>
+    <!-- Tailwind CSS for high-end styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            950: '#0b0f19',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar styling for a cleaner terminal look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between p-4 md:p-8 selection:bg-indigo-500 selection:text-slate-900">
+
+    <!-- Header -->
+    <header class="max-w-6xl w-full mx-auto mb-6 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-800 pb-4">
+        <div>
+            <h1 class="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">
+                LITERARY DEDUCTION ENGINE
+            </h1>
+            <p class="text-xs text-slate-400 font-mono mt-1">DECISION-TREE CLASSIFICATION SANDBOX • TOP 50 MASTERPIECE BOOKS</p>
+        </div>
+        <div class="flex gap-2 text-xs font-mono">
+            <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-indigo-400">Entropy-based Solver Active</span>
+            <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-emerald-400">sRowboat Premise Active</span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start flex-grow">
+        
+        <!-- Left Side: Selection Screen and Game Status (7 Cols) -->
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            
+            <!-- STEP 1: SELECT SECRET WORD -->
+            <div id="step-selection" class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 backdrop-blur-sm transition-all duration-300">
+                <h2 class="text-lg font-bold mb-2 flex items-center gap-2 text-indigo-400">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-950 text-xs font-mono border border-indigo-800">1</span>
+                    Select Your Secret Classic Book
+                </h2>
+                <p class="text-sm text-slate-400 mb-4">Choose a book from our master list of 50 options. The AI will attempt to guess it by questioning its literary taxonomy.</p>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[320px] overflow-y-auto pr-1" id="selection-grid">
+                    <!-- Javascript will dynamically inject buttons here -->
+                </div>
+            </div>
+
+            <!-- STEP 2: ACTIVE GAME INTERACTION -->
+            <div id="step-gameplay" class="hidden bg-slate-900/80 border border-slate-800 rounded-xl p-6 backdrop-blur-sm transition-all duration-300">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold flex items-center gap-2 text-emerald-400">
+                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-950 text-xs font-mono border border-emerald-800">2</span>
+                        Deduction Phase
+                    </h2>
+                    <span id="question-badge" class="text-xs font-mono px-2 py-1 bg-slate-950 border border-slate-800 rounded text-slate-400">Question 1</span>
+                </div>
+
+                <!-- Game Dialogue Terminal -->
+                <div class="bg-slate-950 border border-slate-800 rounded-lg p-6 mb-6 min-h-[140px] flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-indigo-500" id="terminal-accent"></div>
+                    <div>
+                        <span class="text-xs font-mono text-indigo-500 uppercase tracking-widest block mb-2" id="solver-thought">Analyzing Possibilities...</span>
+                        <p class="text-lg font-semibold leading-relaxed" id="display-question">Evaluating the literary classification matrix...</p>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-500 font-mono flex items-center gap-2" id="remaining-candidates-text">
+                        Calculating subset entropy...
+                    </div>
+                </div>
+
+                <!-- Input Controls -->
+                <div class="flex flex-col gap-3">
+                    <div class="grid grid-cols-3 gap-3" id="input-buttons-row">
+                        <!-- Controls generated dynamically -->
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-2 pt-4 border-t border-slate-800/60">
+                        <label class="inline-flex items-center cursor-pointer gap-2">
+                            <input type="checkbox" id="autopilot-toggle" class="sr-only peer" onchange="toggleAutopilot(this)">
+                            <div class="relative w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            <span class="text-xs font-mono text-slate-400 uppercase tracking-wider">Run on Auto-Pilot</span>
+                        </label>
+                        <button onclick="abandonGame()" class="text-xs font-mono text-red-400 hover:text-red-300 transition-colors">
+                            Abandon Game
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GAME LOG -->
+            <div class="bg-slate-900/40 border border-slate-800/60 rounded-xl p-4">
+                <h3 class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">Process Logs & History</h3>
+                <div class="h-[120px] overflow-y-auto font-mono text-xs text-slate-500 space-y-1.5 pr-2" id="log-console">
+                    <div class="text-indigo-500/80">System initialized. Waiting for user to select a target classic book.</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Side: Interactive Cheat Sheet and Vocabulary Matrix (5 Cols) -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <!-- CURRENT TARGET SHEET -->
+            <div id="target-sheet" class="bg-gradient-to-br from-slate-900 to-indigo-950/20 border border-slate-800 rounded-xl p-6 transition-all duration-300">
+                <h3 class="text-xs font-mono text-slate-400 uppercase tracking-widest mb-3">Active Target Profile</h3>
+                
+                <div id="target-unselected" class="text-center py-8 text-slate-500">
+                    <svg class="mx-auto h-12 w-12 mb-3 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                    </svg>
+                    <p class="text-sm font-medium">No secret book selected</p>
+                    <p class="text-xs mt-1 text-slate-600">Select a book on the left to activate verification and help guide answers.</p>
+                </div>
+
+                <div id="target-selected" class="hidden">
+                    <div class="flex justify-between items-start gap-2 mb-4">
+                        <div>
+                            <span class="text-xs font-mono text-indigo-400 bg-indigo-950/60 border border-indigo-800/80 px-2 py-0.5 rounded-md">Chosen Target</span>
+                            <h4 class="text-2xl font-black tracking-tight mt-1 text-slate-100" id="profile-name">Hamlet</h4>
+                        </div>
+                        <button onclick="unselectTarget()" class="text-xs text-slate-500 hover:text-slate-300 font-mono transition-colors">Change</button>
+                    </div>
+
+                    <p class="text-sm text-slate-300 leading-relaxed bg-slate-950/60 border border-slate-800/80 rounded-lg p-3 mb-4 font-sans italic" id="profile-definition">
+                        A tragic drama by William Shakespeare focusing on themes of revenge, madness, and mortality.
+                    </p>
+
+                    <h5 class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">Attribute Vector</h5>
+                    <div class="grid grid-cols-2 gap-2 text-xs font-mono" id="profile-attributes">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- REMAINING MATRIX POOL -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-6">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-mono text-slate-400 uppercase tracking-widest">Deduction Pool</h3>
+                    <span class="text-xs font-mono text-indigo-400" id="pool-ratio">50/50 Active</span>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5 max-h-[220px] overflow-y-auto pr-1" id="pool-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-6xl w-full mx-auto mt-6 pt-4 border-t border-slate-800/60 text-center text-xs text-slate-500 font-mono flex flex-col sm:flex-row justify-between items-center gap-2">
+        <span>Constructed for sRowboat project companion</span>
+        <span>Akinator Classic Books Engine © 2026</span>
+    </footer>
+
+    <!-- Custom Dialog Modal (Replaces unsafe window.alert) -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-sm w-full p-6 shadow-2xl">
+            <h3 class="text-lg font-bold text-indigo-400 mb-2" id="modal-title">Notification</h3>
+            <p class="text-sm text-slate-300 leading-relaxed mb-6" id="modal-body">Message body goes here.</p>
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="w-full sm:w-auto bg-indigo-500 hover:bg-indigo-600 text-slate-950 py-2 px-6 rounded-lg font-semibold text-sm transition-colors">
+                    Understood
+                </button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // Exactly 50 world-renowned classic book terms mapping to structured taxonomic classifications
+    const lexicon = [
+        { name: "1984", definition: "A dystopian social science fiction novel by George Orwell exploring total surveillance and doublethink.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Pride and Prejudice", definition: "Jane Austen's romantic novel of manners following Elizabeth Bennet's growth through social conventions.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: true, has_tragic_death: false, is_first_person: false },
+        { name: "To Kill a Mockingbird", definition: "Harper Lee's Pulitzer Prize-winner dealing with racial injustice, childhood growth, and compassion.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: true, has_tragic_death: true, is_first_person: true },
+        { name: "The Great Gatsby", definition: "F. Scott Fitzgerald's masterpiece about Jay Gatsby's pursuit of Daisy Buchanan during the Jazz Age.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: true },
+        { name: "Moby-Dick", definition: "Herman Melville's epic saga describing Captain Ahab's obsessive quest to destroy the white whale.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: true },
+        { name: "Hamlet", definition: "Shakespeare's tragic masterwork following Prince Hamlet's spiral into madness, revenge, and ghostly encounters.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Crime and Punishment", definition: "Dostoevsky's intense psychological study of Rodion Raskolnikov's mental anguish following a murder.", is_before_1900: true, is_english_original: false, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "One Hundred Years of Solitude", definition: "Gabriel García Márquez's multi-generational family epic introducing the benchmark of magical realism.", is_before_1900: false, is_english_original: false, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "The Odyssey", definition: "Homer's ancient Greek epic poem documenting Odysseus's ten-year journey home after the fall of Troy.", is_before_1900: true, is_english_original: false, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Frankenstein", definition: "Mary Shelley's Gothic horror novel exploring scientific ambition, ethics, and the tragedy of a created monster.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: true, is_female_author: true, has_tragic_death: true, is_first_person: true },
+        { name: "The Catcher in the Rye", definition: "J.D. Salinger's portrait of teenage alienation and search for authenticity through protagonist Holden Caulfield.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: false, is_first_person: true },
+        { name: "Jane Eyre", definition: "Charlotte Brontë's foundational gothic-domestic novel following Jane's independent journey and love for Rochester.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: true, has_tragic_death: true, is_first_person: true },
+        { name: "The Hobbit", definition: "J.R.R. Tolkien's iconic high-fantasy children's story depicting Bilbo Baggins' unexpected quest to slay Smaug.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Brave New World", definition: "Aldous Huxley's futuristic dystopia portraying a highly structured, genetically engineered, and medicated society.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Fahrenheit 451", definition: "Ray Bradbury's haunting dystopian masterpiece depicting an American society where books are outlawed and burned.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "The Grapes of Wrath", definition: "John Steinbeck's Dust Bowl-era epic documenting the Joad family's arduous journey westward to California.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Don Quixote", definition: "Cervantes' legendary satirical novel about an idealistic nobleman who loses his sanity to chivalric romances.", is_before_1900: true, is_english_original: false, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "The Metamorphosis", definition: "Franz Kafka's absurd novella in which salesman Gregor Samsa wakes up transformed into a giant insect.", is_before_1900: false, is_english_original: false, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "The Divine Comedy", definition: "Dante Alighieri's epic narrative poem chronicling his descent through Hell, Purgatory, and into Heaven.", is_before_1900: true, is_english_original: false, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: false, is_first_person: true },
+        { name: "Wuthering Heights", definition: "Emily Brontë's intense, stormy tale of gothic romance, obsession, and vengeance on the Yorkshire moors.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: true, has_tragic_death: true, is_first_person: true },
+        { name: "Anna Karenina", definition: "Leo Tolstoy's heartbreaking Russian masterpiece about high society love, adultery, and domestic disillusionment.", is_before_1900: true, is_english_original: false, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "War and Peace", definition: "Tolstoy's vast epic documenting five aristocratic Russian families amidst Napoleon's invasive campaign.", is_before_1900: true, is_english_original: false, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Great Expectations", definition: "Charles Dickens' beloved Victorian novel following Pip's maturation, dark secrets, and social aspirations.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: true },
+        { name: "The Picture of Dorian Gray", definition: "Oscar Wilde's Faustian classic of a handsome young man who preserves youth while his portrait decays morally.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "The Count of Monte Cristo", definition: "Dumas' ultimate adventure tale of wrongful imprisonment, escape, hidden treasure, and complex calculated revenge.", is_before_1900: true, is_english_original: false, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Les Misérables", definition: "Victor Hugo's monumental exploration of French politics, redemption, and law through former convict Jean Valjean.", is_before_1900: true, is_english_original: false, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "The Iliad", definition: "Homer's foundational epic documenting the final year of the Trojan War and Achilles' devastating wrath.", is_before_1900: true, is_english_original: false, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Romeo and Juliet", definition: "Shakespeare's standard-setting tragedy of young star-crossed lovers whose demises reconcile their feuding families.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Dracula", definition: "Bram Stoker's sensational epistolary Gothic classic that established the modern cultural myth of the vampire.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: true },
+        { name: "Little Women", definition: "Louisa May Alcott's domestic coming-of-age classic chronicling the four March sisters during the Civil War.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: true, has_tragic_death: true, is_first_person: false },
+        { name: "The Scarlet Letter", definition: "Nathaniel Hawthorne's psychological masterpiece exploring guilt, puritanism, and the symbol of the letter 'A'.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "The Stranger", definition: "Camus' philosophical classic opening with Meursault's emotional indifference to his mother's death.", is_before_1900: false, is_english_original: false, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: true },
+        { name: "Madame Bovary", definition: "Gustave Flaubert's realism masterwork exploring Emma Bovary's desperate attempts to escape provincial boredom.", is_before_1900: true, is_english_original: false, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Animal Farm", definition: "Orwell's political fable allegorizing the betrayals and power corruptions of the Russian Revolution.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Lord of the Flies", definition: "William Golding's dark study of castaway British boys descending into tribal savagery on a deserted island.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "The Old Man and the Sea", definition: "Hemingway's sparse, powerful novella detailing Santiago's physical struggle with a giant marlin.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: false, is_first_person: false },
+        { name: "Ulysses", definition: "James Joyce's landmark stream-of-consciousness novel tracking Leopold Bloom through a single day in Dublin.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Mrs. Dalloway", definition: "Virginia Woolf's brilliant modernist work documenting Clarissa Dalloway's preparations for an evening party.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: true, has_tragic_death: true, is_first_person: false },
+        { name: "Lolita", definition: "Vladimir Nabokov's controversial, lyrical confession of Humbert Humbert's obsessive pursuit of young Dolores.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: true },
+        { name: "The Bell Jar", definition: "Sylvia Plath's semi-autobiographical chronicle tracking Esther Greenwood's descent into severe depression.", is_before_1900: false, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: true, has_tragic_death: true, is_first_person: true },
+        { name: "A Tale of Two Cities", definition: "Dickens' historical novel of London and Paris during the turbulent, violent rise of the French Revolution.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Dr. Jekyll and Mr. Hyde", definition: "Stevenson's psychological thriller charting scientific attempts to physically separate good and evil.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "The Time Machine", definition: "H.G. Wells' classic sci-fi journey encountering the class-divided Eloi and predatory Morlocks in the future.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: false, is_first_person: true },
+        { name: "Heart of Darkness", definition: "Joseph Conrad's novella documenting Charles Marlow's journey up the Congo River to locate the rogue Kurtz.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: false, has_tragic_death: true, is_first_person: true },
+        { name: "The Metamorphoses", definition: "Ovid's classical Roman mythological handbook cataloging transformations from chaos up to Caesar's deification.", is_before_1900: true, is_english_original: false, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Middlemarch", definition: "George Eliot's panoramic Victorian study of provincial life, unfulfilled marriages, and social change.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: true, has_tragic_death: true, is_first_person: false },
+        { name: "Gulliver's Travels", definition: "Jonathan Swift's biting satirical travelogue mocking human nature, science, and contemporary politics.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: false, is_first_person: true },
+        { name: "The Trial", definition: "Kafka's terrifying portrait of Josef K., arrested and prosecuted by a nameless, impenetrable authority.", is_before_1900: false, is_english_original: false, is_speculative_or_dystopian: true, is_female_author: false, has_tragic_death: true, is_first_person: false },
+        { name: "Sense and Sensibility", definition: "Jane Austen's domestic chronicle comparing Elinor's rational reserve against Marianne's romantic passion.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: true, has_tragic_death: false, is_first_person: false },
+        { name: "Emma", definition: "Austen's sparkling comedy following rich, clever Emma Woodhouse's misjudged attempts at romantic matchmaking.", is_before_1900: true, is_english_original: true, is_speculative_or_dystopian: false, is_female_author: true, has_tragic_death: false, is_first_person: false }
+    ];
+
+    // Taxonomy of target traits used by solver
+    const taxonomyTraits = [
+        { key: "is_before_1900", question: "Was this classic book originally written or published before the 20th century (prior to 1900)?" },
+        { key: "is_english_original", question: "Was this literary work originally written and published in the English language?" },
+        { key: "is_speculative_or_dystopian", question: "Does the story contain prominent elements of science fiction, fantasy, gothic supernatural, mythology, or dystopian settings?" },
+        { key: "is_female_author", question: "Was this masterpiece book written by a female author?" },
+        { key: "has_tragic_death", question: "Does the narrative culminate in or prominently feature a major character's tragic death, execution, or suicide?" },
+        { key: "is_first_person", question: "Is the story told primarily using a first-person narrative voice ('I')?" }
+    ];
+
+    let gameData = {
+        selectedTarget: null,
+        activePool: [],
+        askedQuestions: [],
+        questionCount: 0,
+        currentDecisionKey: null,
+        autopilotInterval: null,
+        autopilotOn: false
+    };
+
+    // --- ON LOAD BOOTSTRAP ---
+    window.onload = () => {
+        renderSelectionScreen();
+        renderPoolList();
+    };
+
+    // --- STEP 1 UI ENGINE ---
+    function renderSelectionScreen() {
+        const grid = document.getElementById('selection-grid');
+        grid.innerHTML = '';
+        lexicon.forEach(term => {
+            const btn = document.createElement('button');
+            btn.className = "p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-xs font-semibold text-left transition-all focus:outline-none focus:ring-1 focus:ring-indigo-500 duration-150 flex flex-col justify-between h-[64px]";
+            btn.onclick = () => selectTarget(term);
+            btn.innerHTML = `
+                <span class="text-slate-100 truncate w-full block">${term.name}</span>
+                <span class="text-[9px] text-slate-500 font-mono tracking-wider truncate max-w-full uppercase">${getMiniTaxonomy(term)}</span>
+            `;
+            grid.appendChild(btn);
+        });
+    }
+
+    function getMiniTaxonomy(term) {
+        if (term.is_speculative_or_dystopian) return 'Speculative / Dystopia';
+        if (term.is_female_author) return 'Female Voice';
+        if (term.is_before_1900) return 'Pre-1900 Classical';
+        return 'Post-1900 Realism';
+    }
+
+    function selectTarget(term) {
+        gameData.selectedTarget = term;
+        
+        // Show Profile Target Panel
+        document.getElementById('target-unselected').classList.add('hidden');
+        document.getElementById('target-selected').classList.remove('hidden');
+        document.getElementById('profile-name').innerText = term.name;
+        document.getElementById('profile-definition').innerText = term.definition;
+
+        const attrDiv = document.getElementById('profile-attributes');
+        attrDiv.innerHTML = '';
+        taxonomyTraits.forEach(trait => {
+            const val = term[trait.key];
+            const span = document.createElement('div');
+            span.className = `p-1.5 rounded flex justify-between items-center ${val ? 'bg-indigo-950/40 border border-indigo-800/60 text-indigo-300' : 'bg-slate-950/40 border border-slate-800 text-slate-400'}`;
+            span.innerHTML = `
+                <span class="text-[10px] truncate max-w-[120px]">${trait.key.replace('is_', '').replace('has_', '').replace('_', ' ')}</span>
+                <span class="font-bold">${val ? '✓' : '✗'}</span>
+            `;
+            attrDiv.appendChild(span);
+        });
+
+        // Open step 2 and collapse step 1
+        document.getElementById('step-selection').classList.add('opacity-40', 'pointer-events-none');
+        document.getElementById('step-gameplay').classList.remove('hidden');
+        
+        initializeGame();
+    }
+
+    function unselectTarget() {
+        if (gameData.autopilotInterval) clearInterval(gameData.autopilotInterval);
+        
+        gameData.selectedTarget = null;
+        document.getElementById('target-unselected').classList.remove('hidden');
+        document.getElementById('target-selected').classList.add('hidden');
+        
+        document.getElementById('step-selection').classList.remove('opacity-40', 'pointer-events-none');
+        document.getElementById('step-gameplay').classList.add('hidden');
+        
+        // Reset console logs
+        document.getElementById('log-console').innerHTML = `<div class="text-indigo-500/80 font-mono">System initialized. Select a classic book to play again.</div>`;
+    }
+
+    // --- SOLVER ENGINE (DETERMINISTIC ENTROPY SOLUTION) ---
+    function initializeGame() {
+        gameData.activePool = [...lexicon];
+        gameData.askedQuestions = [];
+        gameData.questionCount = 1;
+        
+        logToConsole(`New target acquired: ${gameData.selectedTarget.name}. Analyzing optimal decision tree path...`);
+        evaluateNextSolverStep();
+    }
+
+    function renderPoolList() {
+        const grid = document.getElementById('pool-grid');
+        grid.innerHTML = '';
+        lexicon.forEach(term => {
+            const isActive = gameData.activePool.some(t => t.name === term.name);
+            const div = document.createElement('div');
+            div.className = `p-1.5 border rounded text-xs font-mono transition-all duration-200 text-center truncate ${isActive ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-slate-950/20 border-slate-950/40 text-slate-700 line-through opacity-30'}`;
+            div.innerText = term.name;
+            grid.appendChild(div);
+        });
+
+        const activeCount = gameData.activePool.length;
+        document.getElementById('pool-ratio').innerText = `${activeCount}/50 Candidates`;
+    }
+
+    function evaluateNextSolverStep() {
+        renderPoolList();
+        document.getElementById('question-badge').innerText = `Question ${gameData.questionCount}`;
+
+        // 1. Check victory condition
+        if (gameData.activePool.length === 1) {
+            triggerGameCompletion(gameData.activePool[0].name, true);
+            return;
+        }
+
+        if (gameData.activePool.length === 0) {
+            triggerGameCompletion(null, false);
+            return;
+        }
+
+        // 2. Find the optimal category trait dividing active pool closest to 50%
+        let bestTrait = null;
+        let bestEntropyDeviation = 1.0; // Minimal difference from balanced division
+
+        taxonomyTraits.forEach(trait => {
+            // Skip already evaluated paths
+            if (gameData.askedQuestions.includes(trait.key)) return;
+
+            const matchingCount = gameData.activePool.filter(term => term[trait.key]).length;
+            const ratio = matchingCount / gameData.activePool.length;
+            const deviation = Math.abs(ratio - 0.5);
+
+            // Select trait driving subset closest to perfect 50/50 balance
+            if (deviation < bestEntropyDeviation) {
+                bestEntropyDeviation = deviation;
+                bestTrait = trait;
+            }
+        });
+
+        // 3. If we found a diagnostic trait to narrow the search tree
+        if (bestTrait) {
+            gameData.currentDecisionKey = bestTrait.key;
+            document.getElementById('solver-thought').innerText = `Entropy Partitioning: Deviation ${bestEntropyDeviation.toFixed(2)}`;
+            document.getElementById('display-question').innerText = bestTrait.question;
+            
+            updateCandidateLabel();
+            renderResponseButtons(false, bestTrait.key);
+        } else {
+            // No more category traits. Do direct candidates search from remaining pool
+            let candidate = gameData.activePool[0];
+            gameData.currentDecisionKey = `is_exact_${candidate.name}`;
+            document.getElementById('solver-thought').innerText = `Exhausted Attributes. Direct Guess Route.`;
+            document.getElementById('display-question').innerText = `Is your secret classic book: "${candidate.name}"?`;
+            
+            updateCandidateLabel();
+            renderResponseButtons(true, candidate.name);
+        }
+
+        // Auto pilot process evaluation
+        if (gameData.autopilotOn) {
+            setTimeout(autoProcessResponse, 1500);
+        }
+    }
+
+    function updateCandidateLabel() {
+        document.getElementById('remaining-candidates-text').innerHTML = `
+            <span>Remaining Candidates Pool: <b>${gameData.activePool.length}</b></span>
+            <span class="mx-2">•</span>
+            <span>Target Probability: <b>${(100 / gameData.activePool.length).toFixed(0)}%</b></span>
+        `;
+    }
+
+    // Displays the response options and highlights the correct button for the user based on the chosen word's actual attributes
+    function renderResponseButtons(isDirectGuess, key) {
+        const row = document.getElementById('input-buttons-row');
+        row.innerHTML = '';
+
+        if (isDirectGuess) {
+            // Direct candidate guess yes/no
+            const targetIsCorrect = (gameData.selectedTarget.name === key);
+            
+            row.innerHTML = `
+                <button onclick="handleResponse(true)" class="col-span-2 py-3 px-4 font-bold text-sm bg-slate-900 border ${targetIsCorrect ? 'border-emerald-500 text-emerald-400 bg-emerald-950/20 shadow-md ring-1 ring-emerald-500' : 'border-slate-800 text-slate-300 hover:bg-slate-800'} rounded-lg transition-all">
+                    Yes, it is "${key}"
+                </button>
+                <button onclick="handleResponse(false)" class="col-span-1 py-3 px-4 font-bold text-sm bg-slate-900 border ${!targetIsCorrect ? 'border-emerald-500 text-emerald-400 bg-emerald-950/20 shadow-md ring-1 ring-emerald-500' : 'border-slate-800 text-slate-300 hover:bg-slate-800'} rounded-lg transition-all">
+                    No
+                </button>
+            `;
+        } else {
+            // General attribute evaluation
+            const attributeVal = gameData.selectedTarget[key];
+            
+            row.innerHTML = `
+                <button onclick="handleResponse(true)" class="py-3 px-4 font-bold text-sm bg-slate-900 border ${attributeVal === true ? 'border-emerald-500 text-emerald-400 bg-emerald-950/20 shadow-md ring-1 ring-emerald-500' : 'border-slate-800 text-slate-300 hover:bg-slate-800'} rounded-lg transition-all">
+                    Yes
+                </button>
+                <button onclick="handleResponse(false)" class="py-3 px-4 font-bold text-sm bg-slate-900 border ${attributeVal === false ? 'border-emerald-500 text-emerald-400 bg-emerald-950/20 shadow-md ring-1 ring-emerald-500' : 'border-slate-800 text-slate-300 hover:bg-slate-800'} rounded-lg transition-all">
+                    No
+                </button>
+                <button onclick="handleResponse('maybe')" class="py-3 px-4 font-bold text-sm bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 rounded-lg transition-all">
+                    Maybe
+                </button>
+            `;
+        }
+    }
+
+    function handleResponse(responseVal) {
+        if (responseVal === 'maybe') {
+            // Skip this trait and go to next
+            gameData.askedQuestions.push(gameData.currentDecisionKey);
+            logToConsole(`User responded "Maybe" to question about: ${gameData.currentDecisionKey}. Branch bypassed.`);
+        } else {
+            if (gameData.currentDecisionKey.startsWith("is_exact_")) {
+                const guessedName = gameData.currentDecisionKey.replace("is_exact_", "");
+                if (responseVal === true) {
+                    // Guessed successfully!
+                    triggerGameCompletion(guessedName, true);
+                    return;
+                } else {
+                    // Remove candidate and move on
+                    gameData.activePool = gameData.activePool.filter(term => term.name !== guessedName);
+                    logToConsole(`Indirect Candidate Rejected: "${guessedName}". Active size: ${gameData.activePool.length}`);
+                }
+            } else {
+                // Remove candidates that do not match the target's actual attribute value
+                gameData.activePool = gameData.activePool.filter(term => term[gameData.currentDecisionKey] === responseVal);
+                gameData.askedQuestions.push(gameData.currentDecisionKey);
+                logToConsole(`Analyzed: ${gameData.currentDecisionKey.replace('is_', '')} -> Value is: ${responseVal}. Evaluated remaining candidates: ${gameData.activePool.length}`);
+            }
+        }
+
+        gameData.questionCount++;
+        evaluateNextSolverStep();
+    }
+
+    // --- AUTO-PILOT CONTROL ---
+    function toggleAutopilot(checkbox) {
+        gameData.autopilotOn = checkbox.checked;
+        if (gameData.autopilotOn) {
+            logToConsole("Autopilot enabled. System analyzing optimal inputs automatically...");
+            autoProcessResponse();
+        } else {
+            if (gameData.autopilotInterval) clearTimeout(gameData.autopilotInterval);
+            logToConsole("Autopilot disabled. Direct user manual entry restored.");
+        }
+    }
+
+    function autoProcessResponse() {
+        if (!gameData.autopilotOn || gameData.activePool.length <= 1) return;
+
+        let res = false;
+        if (gameData.currentDecisionKey.startsWith("is_exact_")) {
+            const guessedName = gameData.currentDecisionKey.replace("is_exact_", "");
+            res = (gameData.selectedTarget.name === guessedName);
+        } else {
+            res = gameData.selectedTarget[gameData.currentDecisionKey];
+        }
+
+        // Call selection
+        handleResponse(res);
+    }
+
+    // --- GAME CLEANUP & MODALS ---
+    function triggerGameCompletion(resolvedName, isSuccess) {
+        const terminalAccent = document.getElementById('terminal-accent');
+        const displayQ = document.getElementById('display-question');
+        const solverThought = document.getElementById('solver-thought');
+        
+        if (isSuccess) {
+            terminalAccent.className = "absolute top-0 left-0 w-1 h-full bg-emerald-500";
+            solverThought.innerText = "Target Resolved!";
+            solverThought.className = "text-xs font-mono text-emerald-400 uppercase tracking-widest block mb-2";
+            displayQ.innerHTML = `🎉 Successfully Decoded! The secret classic was indeed <b>${resolvedName}</b>.`;
+            logToConsole(`Success! Concept correctly resolved in ${gameData.questionCount} queries.`);
+        } else {
+            terminalAccent.className = "absolute top-0 left-0 w-1 h-full bg-red-500";
+            solverThought.innerText = "Analysis Failed";
+            solverThought.className = "text-xs font-mono text-red-400 uppercase tracking-widest block mb-2";
+            displayQ.innerHTML = `The solver exhausted its logic matrix but did not find a matching term. Let's restart.`;
+            logToConsole(`Failed! System path matrix collapsed. Verification issue.`);
+        }
+
+        // Change actions to Restart
+        const row = document.getElementById('input-buttons-row');
+        row.innerHTML = `
+            <button onclick="unselectTarget()" class="col-span-3 py-3 px-4 font-bold text-sm bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-slate-950 rounded-lg transition-all shadow-md text-center">
+                Play Again / Try Another Book
+            </button>
+        `;
+        
+        // Disable autopilot
+        document.getElementById('autopilot-toggle').checked = false;
+        gameData.autopilotOn = false;
+    }
+
+    function abandonGame() {
+        showModal(
+            "Abandon Session",
+            "Are you sure you want to exit the current sandbox tracking sequence? Your game path configuration will be lost.",
+            () => {
+                unselectTarget();
+                closeModal();
+            }
+        );
+    }
+
+    function logToConsole(message) {
+        const consoleEl = document.getElementById('log-console');
+        const line = document.createElement('div');
+        line.innerHTML = `<span class="text-slate-600">[${new Date().toLocaleTimeString()}]</span> ${message}`;
+        consoleEl.appendChild(line);
+        consoleEl.scrollTop = consoleEl.scrollHeight;
+    }
+
+    // --- CUSTOM MODAL HANDLERS ---
+    let modalActionCallback = null;
+    
+    function showModal(title, body, actionCallback = null) {
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-body').innerText = body;
+        modalActionCallback = actionCallback;
+        
+        document.getElementById('custom-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        if (modalActionCallback && typeof modalActionCallback === 'function') {
+            modalActionCallback();
+        } else {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+        modalActionCallback = null;
+    }
+</script>
+
+</body>
+</html>
