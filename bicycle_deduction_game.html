@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bicycle Knowledge Base Deduction Sandbox</title>
+    <!-- Tailwind CSS for high-end styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            950: '#0b0f19',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar styling for a cleaner terminal look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between p-4 md:p-8 selection:bg-sky-500 selection:text-slate-900">
+
+    <!-- Header -->
+    <header class="max-w-6xl w-full mx-auto mb-6 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-800 pb-4">
+        <div>
+            <h1 class="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-indigo-400">
+                BICYCLE DEDUCTION ENGINE
+            </h1>
+            <p class="text-xs text-slate-400 font-mono mt-1">DECISION-TREE CLASSIFICATION SANDBOX • TOP 50 TERMS</p>
+        </div>
+        <div class="flex gap-2 text-xs font-mono">
+            <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-sky-400">Entropy-based Solver Active</span>
+            <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-emerald-400">sRowboat Premise Active</span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start flex-grow">
+        
+        <!-- Left Side: Selection Screen and Game Status (7 Cols) -->
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            
+            <!-- STEP 1: SELECT SECRET WORD -->
+            <div id="step-selection" class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 backdrop-blur-sm transition-all duration-300">
+                <h2 class="text-lg font-bold mb-2 flex items-center gap-2 text-sky-400">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-sky-950 text-xs font-mono border border-sky-800">1</span>
+                    Select Your Secret Bicycle Concept
+                </h2>
+                <p class="text-sm text-slate-400 mb-4">Choose a component or accessory from our list of 50 terms. The AI will attempt to guess it by parsing its technical taxonomy.</p>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[320px] overflow-y-auto pr-1" id="selection-grid">
+                    <!-- Javascript will dynamically inject buttons here -->
+                </div>
+            </div>
+
+            <!-- STEP 2: ACTIVE GAME INTERACTION -->
+            <div id="step-gameplay" class="hidden bg-slate-900/80 border border-slate-800 rounded-xl p-6 backdrop-blur-sm transition-all duration-300">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold flex items-center gap-2 text-emerald-400">
+                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-950 text-xs font-mono border border-emerald-800">2</span>
+                        Deduction Phase
+                    </h2>
+                    <span id="question-badge" class="text-xs font-mono px-2 py-1 bg-slate-950 border border-slate-800 rounded text-slate-400">Question 1</span>
+                </div>
+
+                <!-- Game Dialogue Terminal -->
+                <div class="bg-slate-950 border border-slate-800 rounded-lg p-6 mb-6 min-h-[140px] flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-sky-500" id="terminal-accent"></div>
+                    <div>
+                        <span class="text-xs font-mono text-sky-500 uppercase tracking-widest block mb-2" id="solver-thought">Analyzing Possibilities...</span>
+                        <p class="text-lg font-semibold leading-relaxed" id="display-question">Evaluating the mechanical component matrix...</p>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-500 font-mono flex items-center gap-2" id="remaining-candidates-text">
+                        Calculating subset entropy...
+                    </div>
+                </div>
+
+                <!-- Input Controls -->
+                <div class="flex flex-col gap-3">
+                    <div class="grid grid-cols-3 gap-3" id="input-buttons-row">
+                        <!-- Controls generated dynamically -->
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-2 pt-4 border-t border-slate-800/60">
+                        <label class="inline-flex items-center cursor-pointer gap-2">
+                            <input type="checkbox" id="autopilot-toggle" class="sr-only peer" onchange="toggleAutopilot(this)">
+                            <div class="relative w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                            <span class="text-xs font-mono text-slate-400 uppercase tracking-wider">Run on Auto-Pilot</span>
+                        </label>
+                        <button onclick="abandonGame()" class="text-xs font-mono text-red-400 hover:text-red-300 transition-colors">
+                            Abandon Game
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GAME LOG -->
+            <div class="bg-slate-900/40 border border-slate-800/60 rounded-xl p-4">
+                <h3 class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">Process Logs & History</h3>
+                <div class="h-[120px] overflow-y-auto font-mono text-xs text-slate-500 space-y-1.5 pr-2" id="log-console">
+                    <div class="text-sky-500/80">System initialized. Waiting for user to choose a target bike term.</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Side: Interactive Cheat Sheet and Vocabulary Matrix (5 Cols) -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <!-- CURRENT TARGET SHEET -->
+            <div id="target-sheet" class="bg-gradient-to-br from-slate-900 to-indigo-950/40 border border-slate-800 rounded-xl p-6 transition-all duration-300">
+                <h3 class="text-xs font-mono text-slate-400 uppercase tracking-widest mb-3">Active Target Profile</h3>
+                
+                <div id="target-unselected" class="text-center py-8 text-slate-500">
+                    <svg class="mx-auto h-12 w-12 mb-3 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                    </svg>
+                    <p class="text-sm font-medium">No secret concept selected</p>
+                    <p class="text-xs mt-1 text-slate-600">Select a bike term on the left to activate verification</p>
+                </div>
+
+                <div id="target-selected" class="hidden">
+                    <div class="flex justify-between items-start gap-2 mb-4">
+                        <div>
+                            <span class="text-xs font-mono text-sky-400 bg-sky-950/60 border border-sky-800/80 px-2 py-0.5 rounded-md">Chosen Target</span>
+                            <h4 class="text-2xl font-black tracking-tight mt-1 text-slate-100" id="profile-name">Chain</h4>
+                        </div>
+                        <button onclick="unselectTarget()" class="text-xs text-slate-500 hover:text-slate-300 font-mono transition-colors">Change</button>
+                    </div>
+
+                    <p class="text-sm text-slate-300 leading-relaxed bg-slate-950/60 border border-slate-800/80 rounded-lg p-3 mb-4 font-sans italic" id="profile-definition">
+                        A flexible loop of metal links that transfers rotational force.
+                    </p>
+
+                    <h5 class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">Attribute Vector</h5>
+                    <div class="grid grid-cols-2 gap-2 text-xs font-mono" id="profile-attributes">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- REMAINING MATRIX POOL -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-6">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-mono text-slate-400 uppercase tracking-widest">Deduction Pool</h3>
+                    <span class="text-xs font-mono text-sky-400" id="pool-ratio">50/50 Active</span>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5 max-h-[220px] overflow-y-auto pr-1" id="pool-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-6xl w-full mx-auto mt-6 pt-4 border-t border-slate-800/60 text-center text-xs text-slate-500 font-mono flex flex-col sm:flex-row justify-between items-center gap-2">
+        <span>Constructed for sRowboat project companion</span>
+        <span>Akinator Bicycle Classification Engine © 2026</span>
+    </footer>
+
+    <!-- Custom Dialog Modal (Replaces unsafe window.alert) -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-sm w-full p-6 shadow-2xl">
+            <h3 class="text-lg font-bold text-sky-400 mb-2" id="modal-title">Notification</h3>
+            <p class="text-sm text-slate-300 leading-relaxed mb-6" id="modal-body">Message body goes here.</p>
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="w-full sm:w-auto bg-sky-500 hover:bg-sky-600 text-slate-950 py-2 px-6 rounded-lg font-semibold text-sm transition-colors">
+                    Understood
+                </button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // Exactly 50 curated bicycle terms mapping to structured taxonomic classifications
+    const lexicon = [
+        { name: "Frame", definition: "The main structural core of the bicycle, typically constructed from steel, aluminum, carbon fiber, or titanium.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Fork", definition: "The front structural assembly holding the front wheel, enabling steering via the handlebars.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Handlebars", definition: "The steering bar attached to the stem, providing control and a mounting point for levers and shifters.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: true, is_external: false },
+        { name: "Saddle", definition: "The seat where the rider's weight is positioned, designed for ergonomic support over long distances.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: true, is_external: false },
+        { name: "Pedals", definition: "The platform touchpoints that the rider pushes with their feet to rotate the cranks and drive the chain.", is_structural: false, involves_drive: true, is_braking: false, is_wear: false, is_contact: true, is_external: false },
+        { name: "Chain", definition: "The flexible loop of metal links that transfers rotational force from the chainring to the rear cassette.", is_structural: false, involves_drive: true, is_braking: false, is_wear: true, is_contact: false, is_external: false },
+        { name: "Cassette", definition: "The cluster of multiple sprockets attached to the rear hub, dictating gear ratios for climbing or speeding.", is_structural: false, involves_drive: true, is_braking: false, is_wear: true, is_contact: false, is_external: false },
+        { name: "Derailleur", definition: "The mechanical system that moves the chain between different chainrings or cassette sprockets.", is_structural: false, involves_drive: true, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Crankset", definition: "The assembly consisting of the chainrings and crank arms that converts pedaling action into rotational drive.", is_structural: true, involves_drive: true, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Bottom Bracket", definition: "The bearing assembly housed inside the frame that allows the crankset to rotate smoothly.", is_structural: true, involves_drive: true, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Stem", definition: "The component connecting the handlebars directly to the fork steerer tube for steering control.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Seatpost", definition: "The metal or carbon tube that slides into the frame seat tube to support and adjust saddle height.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Wheelset", definition: "The complete front and rear wheel assemblies, providing the rolling structure of the bike.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Rim", definition: "The outer metal or carbon hoop of the wheel where the tire is mounted and rim brakes make contact.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Spokes", definition: "The thin tensioned wires connecting the wheel hub to the outer rim, providing structural rigidity.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Hub", definition: "The central core of a wheel containing bearings and axle, where spokes attach and rotational movement occurs.", is_structural: true, involves_drive: true, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Tire", definition: "The outer rubber casing mounted on the rim that provides traction, cushioning, and grip with the ground.", is_structural: false, involves_drive: false, is_braking: false, is_wear: true, is_contact: false, is_external: false },
+        { name: "Inner Tube", definition: "An inflatable rubber ring placed inside the tire casing that holds air pressure to support the bike.", is_structural: false, involves_drive: false, is_braking: false, is_wear: true, is_contact: false, is_external: false },
+        { name: "Disc Brake Rotor", definition: "The steel disc bolted to the hub that gets squeezed by brake calipers to slow or stop the wheel.", is_structural: true, involves_drive: false, is_braking: true, is_wear: false, is_contact: false, is_external: false },
+        { name: "Brake Caliper", definition: "The mechanical assembly that houses brake pads and uses leverage or hydraulic pressure to squeeze the rotor or rim.", is_structural: false, involves_drive: false, is_braking: true, is_wear: false, is_contact: false, is_external: false },
+        { name: "Brake Pads", definition: "High-friction composite blocks that press against the rim or rotor to generate braking deceleration.", is_structural: false, involves_drive: false, is_braking: true, is_wear: true, is_contact: false, is_external: false },
+        { name: "Brake Lever", definition: "The handlebar-mounted lever pulled by the rider to actuate cables or hydraulic brake lines.", is_structural: false, involves_drive: false, is_braking: true, is_wear: false, is_contact: true, is_external: false },
+        { name: "Shifter", definition: "The lever or grip control on the handlebar pulled or clicked to actuate derailleurs and shift gears.", is_structural: false, involves_drive: true, is_braking: false, is_wear: false, is_contact: true, is_external: false },
+        { name: "Grips", definition: "The rubber or silicone sleeves on flat handlebars providing secure hand purchase and vibration damping.", is_structural: false, involves_drive: false, is_braking: false, is_wear: true, is_contact: true, is_external: false },
+        { name: "Handlebar Tape", definition: "Padded fabric or synthetic wrap coiled around drop handlebars to provide grip, style, and comfort.", is_structural: false, involves_drive: false, is_braking: false, is_wear: true, is_contact: true, is_external: false },
+        { name: "Chainring", definition: "The front sprockets attached to the crank arm that pull the chain forward during pedaling.", is_structural: false, involves_drive: true, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Quick Release Skewer", definition: "A lever-actuated rod running through hollow axle hubs, facilitating rapid wheel removal without tools.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Headset", definition: "The bearing assembly in the head tube that allows the front fork to steer smoothly inside the frame.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Cables & Housing", definition: "The inner steel cables and protective outer tubes used to mechanically actuate brakes and shifters.", is_structural: false, involves_drive: true, is_braking: true, is_wear: true, is_contact: false, is_external: false },
+        { name: "Jockey Wheels", definition: "The small pulleys inside the rear derailleur cage that guide and maintain tension on the chain.", is_structural: false, involves_drive: true, is_braking: false, is_wear: true, is_contact: false, is_external: false },
+        { name: "Thru-Axle", definition: "A thick threaded pin running through frame or fork dropouts and hub cores for safer, stiffer wheel connection.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Fender", definition: "A protective plastic or metal arc mounted over wheels to block water, mud, and road debris.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Pannier Rack", definition: "A metal framework bolted to the frame designed to hold saddlebags or cargo during touring and commuting.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Bottle Cage", definition: "A small metal or carbon bracket bolted to the frame tubes for holding water bottles securely.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Helmet", definition: "Crucial protective headgear worn by riders to mitigate impact injury in the event of a crash.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Multi-tool", definition: "A compact folding tool with hex wrenches and drivers used to make on-the-road mechanical adjustments.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Floor Pump", definition: "A large high-volume manual air pump with a pressure gauge used at home to inflate tires.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Tire Levers", definition: "Flat plastic or nylon wedges used to safely pry a tight tire bead off the rim hook for tube repairs.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Chain Tool", definition: "A metal device with a threaded pin used to push out link rivets for sizing or repairing a chain.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Bike Computer", definition: "A handlebar-mounted digital unit used to track speed, cadence, GPS coordinates, and workout performance.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Bicycle Bell", definition: "A compact mechanical ringer mounted on the steering assembly to warn pedestrians of approach.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Front Light", definition: "An active illuminating unit mounted facing forward to light the path ahead and alert oncoming motorists.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Saddle Bag", definition: "A tiny under-seat zippered pouch used to carry flat-repair tools, spare tubes, or personal keys.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Valve Stem", definition: "The metal tube projecting from the rim through which air is added or released from the tube/tire system.", is_structural: true, involves_drive: false, is_braking: false, is_wear: true, is_contact: false, is_external: false },
+        { name: "Suspension Fork", definition: "A front steering fork fitted with spring or pneumatic shock absorbers to cushion trail impacts.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Rear Shock", definition: "The damper unit mounted in dual-suspension frames to control structural rear wheel swing-arm travel.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: false },
+        { name: "Dropper Post", definition: "A height-adjustable pneumatic seatpost controlled via a handlebar remote for descending control.", is_structural: true, involves_drive: false, is_braking: false, is_wear: false, is_contact: true, is_external: false },
+        { name: "Clipless Shoes", definition: "Specialized cycling shoes with mechanical cleats that lock directly into compatible pedals to improve drive efficiency.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: true, is_external: true },
+        { name: "CO2 Inflator", definition: "A micro nozzle system that punctures pressurized gas cartridges to inflate a tire in seconds.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true },
+        { name: "Kickstand", definition: "A spring-loaded support arm bolted to the frame that pivots down to hold the bike upright when parked.", is_structural: false, involves_drive: false, is_braking: false, is_wear: false, is_contact: false, is_external: true }
+    ];
+
+    // Taxonomy of target traits used by solver
+    const taxonomyTraits = [
+        { key: "is_structural", question: "Is this concept a structural or physical component of the bicycle frame, steering, or rolling chassis?" },
+        { key: "involves_drive", question: "Does this component directly transmit, shift, or convert pedal power into forward motion?" },
+        { key: "is_braking", question: "Is this part primarily designed to slow down, stop, or directly control braking forces?" },
+        { key: "is_wear", question: "Is this high-wear consumable part (made of rubber, wire, or thin metal) designed to degrade and be replaced regularly?" },
+        { key: "is_contact", question: "Is this one of the direct touchpoints where the rider's body (hands, feet, or hips) physically connects with the bike?" },
+        { key: "is_external", question: "Is this an external accessory, safety gear, or tool that is not a permanent mechanical part of the rolling bike?" }
+    ];
+
+    let gameData = {
+        selectedTarget: null,
+        activePool: [],
+        askedQuestions: [],
+        questionCount: 0,
+        currentDecisionKey: null,
+        autopilotInterval: null,
+        autopilotOn: false
+    };
+
+    // --- ON LOAD BOOTSTRAP ---
+    window.onload = () => {
+        renderSelectionScreen();
+        renderPoolList();
+    };
+
+    // --- STEP 1 UI ENGINE ---
+    function renderSelectionScreen() {
+        const grid = document.getElementById('selection-grid');
+        grid.innerHTML = '';
+        lexicon.forEach(term => {
+            const btn = document.createElement('button');
+            btn.className = "p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-xs font-semibold text-left transition-all focus:outline-none focus:ring-1 focus:ring-sky-500 duration-150 flex flex-col justify-between h-[64px]";
+            btn.onclick = () => selectTarget(term);
+            btn.innerHTML = `
+                <span class="text-slate-100">${term.name}</span>
+                <span class="text-[9px] text-slate-500 font-mono tracking-wider truncate max-w-full uppercase">${getMiniTaxonomy(term)}</span>
+            `;
+            grid.appendChild(btn);
+        });
+    }
+
+    function getMiniTaxonomy(term) {
+        if (term.is_external) return 'Accessory';
+        if (term.involves_drive) return 'Drivetrain';
+        if (term.is_braking) return 'Brakes';
+        if (term.is_structural) return 'Structure';
+        return 'Component';
+    }
+
+    function selectTarget(term) {
+        gameData.selectedTarget = term;
+        
+        // Show Profile Target Panel
+        document.getElementById('target-unselected').classList.add('hidden');
+        document.getElementById('target-selected').classList.remove('hidden');
+        document.getElementById('profile-name').innerText = term.name;
+        document.getElementById('profile-definition').innerText = term.definition;
+
+        const attrDiv = document.getElementById('profile-attributes');
+        attrDiv.innerHTML = '';
+        taxonomyTraits.forEach(trait => {
+            const val = term[trait.key];
+            const span = document.createElement('div');
+            span.className = `p-1.5 rounded flex justify-between items-center ${val ? 'bg-emerald-950/40 border border-emerald-800/60 text-emerald-300' : 'bg-slate-950/40 border border-slate-800 text-slate-400'}`;
+            span.innerHTML = `
+                <span class="text-[10px] truncate max-w-[120px]">${trait.key.replace('is_', '').replace('involves_', '').replace('_', ' ')}</span>
+                <span class="font-bold">${val ? '✓' : '✗'}</span>
+            `;
+            attrDiv.appendChild(span);
+        });
+
+        // Open step 2 and collapse step 1
+        document.getElementById('step-selection').classList.add('opacity-40', 'pointer-events-none');
+        document.getElementById('step-gameplay').classList.remove('hidden');
+        
+        initializeGame();
+    }
+
+    function unselectTarget() {
+        if (gameData.autopilotInterval) clearInterval(gameData.autopilotInterval);
+        
+        gameData.selectedTarget = null;
+        document.getElementById('target-unselected').classList.remove('hidden');
+        document.getElementById('target-selected').classList.add('hidden');
+        
+        document.getElementById('step-selection').classList.remove('opacity-40', 'pointer-events-none');
+        document.getElementById('step-gameplay').classList.add('hidden');
+        
+        // Reset console logs
+        document.getElementById('log-console').innerHTML = `<div class="text-sky-500/80 font-mono">System initialized. Select a bicycle term to play again.</div>`;
+    }
+
+    // --- SOLVER ENGINE (DETERMINISTIC ENTROPY SOLUTION) ---
+    function initializeGame() {
+        gameData.activePool = [...lexicon];
+        gameData.askedQuestions = [];
+        gameData.questionCount = 1;
+        
+        logToConsole(`New target acquired: ${gameData.selectedTarget.name}. Analyzing optimal decision tree path...`);
+        evaluateNextSolverStep();
+    }
+
+    function renderPoolList() {
+        const grid = document.getElementById('pool-grid');
+        grid.innerHTML = '';
+        lexicon.forEach(term => {
+            const isActive = gameData.activePool.some(t => t.name === term.name);
+            const div = document.createElement('div');
+            div.className = `p-1.5 border rounded text-xs font-mono transition-all duration-200 text-center ${isActive ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-slate-950/20 border-slate-950/40 text-slate-700 line-through opacity-30'}`;
+            div.innerText = term.name;
+            grid.appendChild(div);
+        });
+
+        const activeCount = gameData.activePool.length;
+        document.getElementById('pool-ratio').innerText = `${activeCount}/50 Candidates`;
+    }
+
+    function evaluateNextSolverStep() {
+        renderPoolList();
+        document.getElementById('question-badge').innerText = `Question ${gameData.questionCount}`;
+
+        // 1. Check victory condition
+        if (gameData.activePool.length === 1) {
+            triggerGameCompletion(gameData.activePool[0].name, true);
+            return;
+        }
+
+        if (gameData.activePool.length === 0) {
+            triggerGameCompletion(null, false);
+            return;
+        }
+
+        // 2. Find the optimal category trait dividing active pool closest to 50%
+        let bestTrait = null;
+        let bestEntropyDeviation = 1.0; // Minimal difference from balanced division
+
+        taxonomyTraits.forEach(trait => {
+            // Skip already evaluated paths
+            if (gameData.askedQuestions.includes(trait.key)) return;
+
+            const matchingCount = gameData.activePool.filter(term => term[trait.key]).length;
+            const ratio = matchingCount / gameData.activePool.length;
+            const deviation = Math.abs(ratio - 0.5);
+
+            // Select trait driving subset closest to perfect 50/50 balance
+            if (deviation < bestEntropyDeviation) {
+                bestEntropyDeviation = deviation;
+                bestTrait = trait;
+            }
+        });
+
+        // 3. If we found a diagnostic trait to narrow the search tree
+        if (bestTrait) {
+            gameData.currentDecisionKey = bestTrait.key;
+            document.getElementById('solver-thought').innerText = `Entropy Partitioning: Deviation ${bestEntropyDeviation.toFixed(2)}`;
+            document.getElementById('display-question').innerText = bestTrait.question;
+            
+            updateCandidateLabel();
+            renderResponseButtons(false, bestTrait.key);
+        } else {
+            // No more category traits. Do direct candidates search from remaining pool
+            let candidate = gameData.activePool[0];
+            gameData.currentDecisionKey = `is_exact_${candidate.name}`;
+            document.getElementById('solver-thought').innerText = `Exhausted Attributes. Direct Guess Route.`;
+            document.getElementById('display-question').innerText = `Is your secret concept: "${candidate.name}"?`;
+            
+            updateCandidateLabel();
+            renderResponseButtons(true, candidate.name);
+        }
+
+        // Auto pilot process evaluation
+        if (gameData.autopilotOn) {
+            setTimeout(autoProcessResponse, 1500);
+        }
+    }
+
+    function updateCandidateLabel() {
+        document.getElementById('remaining-candidates-text').innerHTML = `
+            <span>Remaining Candidates Pool: <b>${gameData.activePool.length}</b></span>
+            <span class="mx-2">•</span>
+            <span>Target Probability: <b>${(100 / gameData.activePool.length).toFixed(0)}%</b></span>
+        `;
+    }
+
+    // Displays the response options and highlights the correct button for the user based on the chosen word's actual attributes
+    function renderResponseButtons(isDirectGuess, key) {
+        const row = document.getElementById('input-buttons-row');
+        row.innerHTML = '';
+
+        if (isDirectGuess) {
+            // Direct candidate guess yes/no
+            const targetIsCorrect = (gameData.selectedTarget.name === key);
+            
+            row.innerHTML = `
+                <button onclick="handleResponse(true)" class="col-span-2 py-3 px-4 font-bold text-sm bg-slate-900 border ${targetIsCorrect ? 'border-emerald-500 text-emerald-400 bg-emerald-950/20 shadow-md ring-1 ring-emerald-500' : 'border-slate-800 text-slate-300 hover:bg-slate-800'} rounded-lg transition-all">
+                    Yes, it is "${key}"
+                </button>
+                <button onclick="handleResponse(false)" class="col-span-1 py-3 px-4 font-bold text-sm bg-slate-900 border ${!targetIsCorrect ? 'border-emerald-500 text-emerald-400 bg-emerald-950/20 shadow-md ring-1 ring-emerald-500' : 'border-slate-800 text-slate-300 hover:bg-slate-800'} rounded-lg transition-all">
+                    No
+                </button>
+            `;
+        } else {
+            // General attribute evaluation
+            const attributeVal = gameData.selectedTarget[key];
+            
+            row.innerHTML = `
+                <button onclick="handleResponse(true)" class="py-3 px-4 font-bold text-sm bg-slate-900 border ${attributeVal === true ? 'border-emerald-500 text-emerald-400 bg-emerald-950/20 shadow-md ring-1 ring-emerald-500' : 'border-slate-800 text-slate-300 hover:bg-slate-800'} rounded-lg transition-all">
+                    Yes
+                </button>
+                <button onclick="handleResponse(false)" class="py-3 px-4 font-bold text-sm bg-slate-900 border ${attributeVal === false ? 'border-emerald-500 text-emerald-400 bg-emerald-950/20 shadow-md ring-1 ring-emerald-500' : 'border-slate-800 text-slate-300 hover:bg-slate-800'} rounded-lg transition-all">
+                    No
+                </button>
+                <button onclick="handleResponse('maybe')" class="py-3 px-4 font-bold text-sm bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 rounded-lg transition-all">
+                    Maybe
+                </button>
+            `;
+        }
+    }
+
+    function handleResponse(responseVal) {
+        if (responseVal === 'maybe') {
+            // Skip this trait and go to next
+            gameData.askedQuestions.push(gameData.currentDecisionKey);
+            logToConsole(`User responded "Maybe" to question about: ${gameData.currentDecisionKey}. Branch bypassed.`);
+        } else {
+            if (gameData.currentDecisionKey.startsWith("is_exact_")) {
+                const guessedName = gameData.currentDecisionKey.replace("is_exact_", "");
+                if (responseVal === true) {
+                    // Guessed successfully!
+                    triggerGameCompletion(guessedName, true);
+                    return;
+                } else {
+                    // Remove candidate and move on
+                    gameData.activePool = gameData.activePool.filter(term => term.name !== guessedName);
+                    logToConsole(`Indirect Candidate Rejected: "${guessedName}". Active size: ${gameData.activePool.length}`);
+                }
+            } else {
+                // Remove candidates that do not match the target's actual attribute value
+                gameData.activePool = gameData.activePool.filter(term => term[gameData.currentDecisionKey] === responseVal);
+                gameData.askedQuestions.push(gameData.currentDecisionKey);
+                logToConsole(`Analyzed: ${gameData.currentDecisionKey.replace('is_', '')} -> Value is: ${responseVal}. Evaluated remaining candidates: ${gameData.activePool.length}`);
+            }
+        }
+
+        gameData.questionCount++;
+        evaluateNextSolverStep();
+    }
+
+    // --- AUTO-PILOT CONTROL ---
+    function toggleAutopilot(checkbox) {
+        gameData.autopilotOn = checkbox.checked;
+        if (gameData.autopilotOn) {
+            logToConsole("Autopilot enabled. System analyzing optimal inputs automatically...");
+            autoProcessResponse();
+        } else {
+            if (gameData.autopilotInterval) clearTimeout(gameData.autopilotInterval);
+            logToConsole("Autopilot disabled. Direct user manual entry restored.");
+        }
+    }
+
+    function autoProcessResponse() {
+        if (!gameData.autopilotOn || gameData.activePool.length <= 1) return;
+
+        let res = false;
+        if (gameData.currentDecisionKey.startsWith("is_exact_")) {
+            const guessedName = gameData.currentDecisionKey.replace("is_exact_", "");
+            res = (gameData.selectedTarget.name === guessedName);
+        } else {
+            res = gameData.selectedTarget[gameData.currentDecisionKey];
+        }
+
+        // Call selection
+        handleResponse(res);
+    }
+
+    // --- GAME CLEANUP & MODALS ---
+    function triggerGameCompletion(resolvedName, isSuccess) {
+        const terminalAccent = document.getElementById('terminal-accent');
+        const displayQ = document.getElementById('display-question');
+        const solverThought = document.getElementById('solver-thought');
+        
+        if (isSuccess) {
+            terminalAccent.className = "absolute top-0 left-0 w-1 h-full bg-emerald-500";
+            solverThought.innerText = "Target Resolved!";
+            solverThought.className = "text-xs font-mono text-emerald-400 uppercase tracking-widest block mb-2";
+            displayQ.innerHTML = `🎉 Successfully Decoded! The concept was indeed <b>${resolvedName}</b>.`;
+            logToConsole(`Success! Concept correctly resolved in ${gameData.questionCount} queries.`);
+        } else {
+            terminalAccent.className = "absolute top-0 left-0 w-1 h-full bg-red-500";
+            solverThought.innerText = "Analysis Failed";
+            solverThought.className = "text-xs font-mono text-red-400 uppercase tracking-widest block mb-2";
+            displayQ.innerHTML = `The solver exhausted its logic matrix but did not find a matching term. Let's restart.`;
+            logToConsole(`Failed! System path matrix collapsed. Verification issue.`);
+        }
+
+        // Change actions to Restart
+        const row = document.getElementById('input-buttons-row');
+        row.innerHTML = `
+            <button onclick="unselectTarget()" class="col-span-3 py-3 px-4 font-bold text-sm bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-600 hover:to-indigo-600 text-slate-950 rounded-lg transition-all shadow-md text-center">
+                Play Again / Try Another Term
+            </button>
+        `;
+        
+        // Disable autopilot
+        document.getElementById('autopilot-toggle').checked = false;
+        gameData.autopilotOn = false;
+    }
+
+    function abandonGame() {
+        showModal(
+            "Abandon Session",
+            "Are you sure you want to exit the current sandbox tracking sequence? Your game path configuration will be lost.",
+            () => {
+                unselectTarget();
+                closeModal();
+            }
+        );
+    }
+
+    function logToConsole(message) {
+        const consoleEl = document.getElementById('log-console');
+        const line = document.createElement('div');
+        line.innerHTML = `<span class="text-slate-600">[${new Date().toLocaleTimeString()}]</span> ${message}`;
+        consoleEl.appendChild(line);
+        consoleEl.scrollTop = consoleEl.scrollHeight;
+    }
+
+    // --- CUSTOM MODAL HANDLERS ---
+    let modalActionCallback = null;
+    
+    function showModal(title, body, actionCallback = null) {
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-body').innerText = body;
+        modalActionCallback = actionCallback;
+        
+        document.getElementById('custom-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        if (modalActionCallback && typeof modalActionCallback === 'function') {
+            modalActionCallback();
+        } else {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+        modalActionCallback = null;
+    }
+</script>
+
+</body>
+</html>
