@@ -1,6 +1,4 @@
-# iQ
-
-# LLM Deduction Engine (Akinator-Style Decision Tree)
+# iQ ~ LLM Deduction Engine (Akinator-Style Decision Tree)
 
 A lightweight, high-performance, single-page interactive sandbox designed for mobile/iPad devices. It implements a deterministic decision-tree classification engine to deduce one of 25 curated Large Language Model (LLM) concepts based on system traits.
 
@@ -13,3 +11,8 @@ This repository serves as an educational tool for demonstrating taxonomic classi
 
 ---
 
+This one was built with 25 terms.  The LLM I used to generate this code said it would most likely top out around 50 before the logic would go wonky.
+
+Let me know if you have other thoughts.
+
+All the best..
