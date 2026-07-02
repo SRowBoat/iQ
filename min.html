@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>iQ Deduction Engine</title>
+    <style>
+        body { background: #000; color: #0f0; font-family: monospace; padding: 10px; }
+        .wrapper { overflow: hidden; }
+        .col { float: left; width: 48%; margin: 1%; border: 1px solid #0f0; padding: 10px; }
+        button { background: #000; color: #0f0; border: 1px solid #0f0; padding: 5px; cursor: pointer; }
+        button:hover { background: #0f0; color: #000; }
+        .pool-item { color: #555; }
+        .active { color: #0f0; }
+    </style>
+</head>
+<body>
+    <h1>iQ ENGINE</h1>
+    <div class="wrapper">
+        <div id="setup" class="col">
+            <h3>Choose Target</h3>
+            <div id="lexicon-list"></div>
+            <button onclick="pickRandom()">Pick For Me</button>
+        </div>
+        <div id="game" class="col" style="display:none;">
+            <h3 id="q-text">Ready.</h3>
+            <div id="q-btns"></div>
+            <h3>Remaining Pool</h3>
+            <div id="pool-view"></div>
+        </div>
+    </div>
+
+<script>
+    var lexicon = [
+        { name: "Espresso", is_espresso: true, has_milk: false },
+        { name: "Latte", is_espresso: true, has_milk: true },
+        { name: "Americano", is_espresso: true, has_milk: false },
+        { name: "Cold Brew", is_espresso: false, has_milk: false },
+        { name: "Flat White", is_espresso: true, has_milk: true },
+        { name: "Cappuccino", is_espresso: true, has_milk: true },
+        { name: "Mocha", is_espresso: true, has_milk: true }
+    ];
+
+    var state = { pool: [], target: null };
+
+    function init() {
+        var list = document.getElementById('lexicon-list');
+        for(var i=0; i<lexicon.length; i++) {
+            var b = document.createElement('button');
+            b.innerText = lexicon[i].name;
+            b.onclick = (function(item) { return function() { start(item); } })(lexicon[i]);
+            list.appendChild(b);
+            list.appendChild(document.createElement('br'));
+        }
+    }
+
+    function pickRandom() {
+        start(lexicon[Math.floor(Math.random() * lexicon.length)]);
+    }
+
+    function start(item) {
+        state.target = item;
+        state.pool = lexicon.slice();
+        document.getElementById('setup').style.display = 'none';
+        document.getElementById('game').style.display = 'block';
+        update();
+    }
+
+    function update() {
+        document.getElementById('pool-view').innerHTML = '';
+        for(var i=0; i<lexicon.length; i++) {
+            var div = document.createElement('div');
+            div.innerText = lexicon[i].name;
+            div.className = (state.pool.indexOf(lexicon[i]) > -1) ? 'active' : 'pool-item';
+            document.getElementById('pool-view').appendChild(div);
+        }
+        ask();
+    }
+
+    function ask() {
+        if(state.pool.length <= 1) {
+            document.getElementById('q-text').innerText = "Target: " + state.pool[0].name;
+            document.getElementById('q-btns').innerHTML = '<button onclick="location.reload()">Reset</button>';
+            return;
+        }
+        document.getElementById('q-text').innerText = "Is it espresso based?";
+        document.getElementById('q-btns').innerHTML = 
+            '<button onclick="answer(true)">Yes</button> ' +
+            '<button onclick="answer(false)">No</button>';
+    }
+
+    function answer(val) {
+        state.pool = state.pool.filter(function(i) { return i.is_espresso === val; });
+        update();
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>
