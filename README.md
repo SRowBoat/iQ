@@ -17,8 +17,8 @@ The index file shows the original concept, these are easier to get:
 
 ---
 
-This one was built with 25 terms.  The LLM I used to generate this code said it would most likely top out around 50 before the logic would go wonky.
+## Licenses
+This project is licensed under the [Your License] — see the LICENSE file for details.
 
-Let me know if you have other thoughts.
-
-All the best..
+### Third-Party Licenses
+* [Tailwind CSS](https://tailwindcss.com/) — MIT License
