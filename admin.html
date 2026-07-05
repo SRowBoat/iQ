@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian Provinces Interactive Matrix Builder</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --primary-hover: #004085;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --border: #dee2e6;
+            --yes-color: #28a745;
+            --no-color: #dc3545;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #111;
+        }
+
+        .mode-toggle {
+            display: flex;
+            background: #e9ecef;
+            padding: 4px;
+            border-radius: 6px;
+        }
+
+        .toggle-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn.active {
+            background: var(--card-bg);
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* Table & Grid Styling */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 1000px;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        th {
+            background-color: #f1f3f5;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        .col-reason { width: 30%; }
+        .col-prov { width: 6%; text-align: center; }
+        .col-action { width: 10%; text-align: center; }
+
+        /* Admin Controls */
+        .add-reason-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #f1f3f5;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button.btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        button.btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        button.btn-danger {
+            background: transparent;
+            color: var(--no-color);
+            border: 1px solid var(--no-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button.btn-danger:hover {
+            background: var(--no-color);
+            color: white;
+        }
+
+        /* Checkbox Toggles */
+        .boolean-toggle {
+            cursor: pointer;
+            font-weight: bold;
+            padding: 6px;
+            border-radius: 4px;
+            user-select: none;
+            display: inline-block;
+            width: 35px;
+            text-align: center;
+        }
+
+        .boolean-toggle.yes {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .boolean-toggle.no {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Viewer UI badges */
+        .badge {
+            display: inline-block;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        .badge.yes { background: #d4edda; color: #155724; }
+        .badge.no { background: #e9ecef; color: #6c757d; }
+
+        /* Data management box */
+        .backup-box {
+            margin-top: 30px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 6px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            font-family: monospace;
+            margin-top: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .instructions {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <h1>Provincial Comparison Matrix</h1>
+            <div class="instructions" id="mode-instruction">Admin Mode: Add your exhaustive reasons and click cells to toggle YES/NO.</div>
+        </div>
+        <div class="mode-toggle">
+            <button class="toggle-btn active" id="btn-admin" onclick="switchMode('admin')">Admin Edit</button>
+            <button class="toggle-btn" id="btn-viewer" onclick="switchMode('viewer')">Public Viewer</button>
+        </div>
+    </header>
+
+    <!-- ADMIN SECTION -->
+    <div id="section-admin" class="view-section active">
+        <div class="add-reason-form">
+            <input type="text" id="new-reason-text" placeholder="Type a new reason/trait here (e.g., Has a population over 1 million)...">
+            <button class="btn-primary" onclick="addReason()">Add Reason</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-reason">Reason / Criteria</th>
+                        <th class="col-prov">NL</th>
+                        <th class="col-prov">PE</th>
+                        <th class="col-prov">NS</th>
+                        <th class="col-prov">NB</th>
+                        <th class="col-prov">QC</th>
+                        <th class="col-prov">ON</th>
+                        <th class="col-prov">MB</th>
+                        <th class="col-prov">SK</th>
+                        <th class="col-prov">AB</th>
+                        <th class="col-prov">BC</th>
+                        <th class="col-action">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-table-body">
+                    <!-- Dynamic rows go here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="backup-box">
+            <strong>Save/Backup Your Data:</strong>
+            <p style="margin: 5px 0; font-size: 0.85rem; color: #555;">To save your progress permanently or move it to a different computer, copy this text box and save it in a notepad document. You can paste it back here anytime and click "Load Project Data".</p>
+            <textarea id="data-string-io"></textarea>
+            <button class="btn-primary" style="margin-top: 5px; padding: 6px 12px; font-size: 0.85rem;" onclick="loadDataFromString()">Load Project Data</button>
+        </div>
+    </div>
+
+    <!-- VIEWER SECTION -->
+    <div id="section-viewer" class="view-section">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-reason">Reason / Criteria</th>
+                        <th class="col-prov">NL</th>
+                        <th class="col-prov">PE</th>
+                        <th class="col-prov">NS</th>
+                        <th class="col-prov">NB</th>
+                        <th class="col-prov">QC</th>
+                        <th class="col-prov">ON</th>
+                        <th class="col-prov">MB</th>
+                        <th class="col-prov">SK</th>
+                        <th class="col-prov">AB</th>
+                        <th class="col-prov">BC</th>
+                    </tr>
+                </thead>
+                <tbody id="viewer-table-body">
+                    <!-- Dynamic rows go here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 10 Canadian Provinces
+    const provinces = ['NL', 'PE', 'NS', 'NB', 'QC', 'ON', 'MB', 'SK', 'AB', 'BC'];
+
+    // Initial default starting data
+    let dataset = [
+        {
+            id: 1,
+            text: "Official language is uniquely or primarily French",
+            values: { NL: false, PE: false, NS: false, NB: false, QC: true, ON: false, MB: false, SK: false, AB: false, BC: false }
+        },
+        {
+            id: 2,
+            text: "Is considered an Atlantic Province",
+            values: { NL: true, PE: true, NS: true, NB: true, QC: false, ON: false, MB: false, SK: false, AB: false, BC: false }
+        }
+    ];
+
+    function switchMode(mode) {
+        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+
+        if(mode === 'admin') {
+            document.getElementById('btn-admin').classList.add('active');
+            document.getElementById('section-admin').classList.add('active');
+            document.getElementById('mode-instruction').innerText = "Admin Mode: Add your exhaustive reasons and click cells to toggle YES/NO.";
+            renderAdminTable();
+        } else {
+            document.getElementById('btn-viewer').classList.add('active');
+            document.getElementById('section-viewer').classList.add('active');
+            document.getElementById('mode-instruction').innerText = "Viewer Mode: Polished format showing how each province scales across reasons.";
+            renderViewerTable();
+        }
+    }
+
+    function renderAdminTable() {
+        const tbody = document.getElementById('admin-table-body');
+        tbody.innerHTML = '';
+
+        dataset.forEach((row, rowIndex) => {
+            const tr = document.createElement('tr');
+            
+            // Text cell
+            const tdText = document.createElement('td');
+            tdText.innerText = row.text;
+            tr.appendChild(tdText);
+
+            // Province Toggles
+            provinces.forEach(prov => {
+                const tdProv = document.createElement('td');
+                tdProv.style.textAlign = 'center';
+                
+                const isYes = row.values[prov];
+                const toggle = document.createElement('span');
+                toggle.className = `boolean-toggle ${isYes ? 'yes' : 'no'}`;
+                toggle.innerText = isYes ? 'YES' : 'NO';
+                toggle.onclick = () => {
+                    dataset[rowIndex].values[prov] = !dataset[rowIndex].values[prov];
+                    renderAdminTable();
+                    updateDataBox();
+                };
+                
+                tdProv.appendChild(toggle);
+                tr.appendChild(tdProv);
+            });
+
+            // Action delete button
+            const tdAction = document.createElement('td');
+            tdAction.style.textAlign = 'center';
+            const delBtn = document.createElement('button');
+            delBtn.className = 'btn-danger';
+            delBtn.innerText = 'Delete';
+            delBtn.onclick = () => {
+                dataset.splice(rowIndex, 1);
+                renderAdminTable();
+                updateDataBox();
+            };
+            tdAction.appendChild(delBtn);
+            tr.appendChild(tdAction);
+
+            tbody.appendChild(tr);
+        });
+
+        updateDataBox();
+    }
+
+    function renderViewerTable() {
+        const tbody = document.getElementById('viewer-table-body');
+        tbody.innerHTML = '';
+
+        if(dataset.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="11" style="text-align:center; color:#888; padding:30px;">No reasons added yet. Switch to Admin mode to add traits!</td></tr>`;
+            return;
+        }
+
+        dataset.forEach(row => {
+            const tr = document.createElement('tr');
+            
+            const tdText = document.createElement('td');
+            tdText.innerText = row.text;
+            tr.appendChild(tdText);
+
+            provinces.forEach(prov => {
+                const tdProv = document.createElement('td');
+                tdProv.style.textAlign = 'center';
+                
+                const isYes = row.values[prov];
+                const badge = document.createElement('span');
+                badge.className = `badge ${isYes ? 'yes' : 'no'}`;
+                badge.innerText = isYes ? '✔' : '—';
+                
+                tdProv.appendChild(badge);
+                tr.appendChild(tdProv);
+            });
+
+            tbody.appendChild(tr);
+        });
+    }
+
+    function addReason() {
+        const input = document.getElementById('new-reason-text');
+        const text = input.value.trim();
+        if(!text) return;
+
+        const newRow = {
+            id: Date.now(),
+            text: text,
+            values: {}
+        };
+        // Default all provinces to false for new rows
+        provinces.forEach(prov => { newRow.values[prov] = false; });
+
+        dataset.push(newRow);
+        input.value = '';
+        renderAdminTable();
+    }
+
+    function updateDataBox() {
+        document.getElementById('data-string-io').value = JSON.stringify(dataset, null, 2);
+    }
+
+    function loadDataFromString() {
+        try {
+            const str = document.getElementById('data-string-io').value;
+            const parsed = JSON.parse(str);
+            if(Array.isArray(parsed)) {
+                dataset = parsed;
+                renderAdminTable();
+                alert('Data successfully loaded!');
+            } else {
+                alert('Invalid data format.');
+            }
+        } catch(e) {
+            alert('Failed to read data. Make sure it matches the format perfectly.');
+        }
+    }
+
+    // Initial load
+    renderAdminTable();
+</script>
+
+</body>
+</html>
